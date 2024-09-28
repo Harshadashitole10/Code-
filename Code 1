@@ -1,0 +1,146 @@
+#include <iostream>
+
+using namespace std;
+
+#define MAX_N 100
+
+
+
+bool isSafe(int x, int y, int N, int sol[MAX_N][MAX_N])
+
+{
+
+return (x >= 0 && x < N && y >= 0 && y < N && sol[x][y] == -1);
+
+}
+
+
+
+void printSolution(int N, int sol[MAX_N][MAX_N])
+
+{
+
+for (int x = 0; x < N; x++) {
+
+for (int y = 0; y < N; y++) {
+
+int value = sol[x][y]; if (value
+
+< 10) { cout << " " << value
+
+<< " ";
+
+} else if (value < 100) { cout
+
+<< " " << value << " ";
+
+} else { cout << value
+
+<< " ";
+
+
+
+}
+
+}
+
+cout << endl;
+
+}
+
+}
+
+
+
+bool solveKTUtil(int x, int y, int movei, int N, int sol[MAX_N][MAX_N], int xMove[], int yMove[])
+
+{
+
+if (movei == N * N)
+
+return true;
+
+
+
+for (int k = 0; k < 8; k++) { int next_x = x + xMove[k]; int next_y = y +
+
+yMove[k]; if (isSafe(next_x, next_y, N, sol)) { sol[next_x][next_y] =
+
+movei; if (solveKTUtil(next_x, next_y, movei + 1, N, sol, xMove,
+
+yMove)) return true; else sol[next_x][next_y] = -1;
+
+}
+
+}
+
+return false;
+
+}
+
+
+
+bool solveKT(int N)
+
+{
+
+if (N <= 0 || N > MAX_N) { cout << "Invalid board size. Please enter a size between 1 and "
+
+<< MAX_N << "." << endl;
+
+return false;
+
+}
+
+
+
+int sol[MAX_N][MAX_N];
+
+for (int x = 0; x < N; x++)
+
+for (int y = 0; y < N; y++)
+
+sol[x][y] = -1;
+
+
+
+int xMove[8] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+
+int yMove[8] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+
+
+sol[0][0] = 0;
+
+
+
+if (solveKTUtil(0, 0, 1, N, sol, xMove, yMove)) {
+
+printSolution(N, sol); return true;
+
+} else { cout << "Solution does not exist" <<
+
+endl; return false;
+
+}
+
+}
+
+
+
+int main()
+
+{
+
+int N; cout << "Enter the size of the chessboard (1 to " << MAX_N
+
+<< "): "; cin >> N;
+
+solveKT(N);
+
+return 0;
+
+}
+
+
+
